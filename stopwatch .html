@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Stopwatch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .stopwatch {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start {
+            background: #28a745;
+            color: white;
+        }
+
+        .start:hover {
+            background: #218838;
+        }
+
+        .stop {
+            background: #dc3545;
+            color: white;
+        }
+
+        .stop:hover {
+            background: #c82333;
+        }
+
+        .reset {
+            background: #ffc107;
+            color: black;
+        }
+
+        .reset:hover {
+            background: #e0a800;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Stopwatch</h1>
+        <div class="stopwatch" id="display">00:00:00</div>
+        <div class="buttons">
+            <button class="start" onclick="startStopwatch()">Start</button>
+            <button class="stop" onclick="stopStopwatch()">Stop</button>
+            <button class="reset" onclick="resetStopwatch()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let timer;
+        let isRunning = false;
+        let startTime = 0;
+        let elapsedTime = 0;
+
+        function updateDisplay() {
+            let time = elapsedTime + (isRunning ? Date.now() - startTime : 0);
+            let minutes = Math.floor(time / 60000);
+            let seconds = Math.floor((time % 60000) / 1000);
+            let milliseconds = Math.floor((time % 1000) / 10);
+
+            document.getElementById("display").textContent =
+                (minutes < 10 ? "0" : "") + minutes + ":" +
+                (seconds < 10 ? "0" : "") + seconds + ":" +
+                (milliseconds < 10 ? "0" : "") + milliseconds;
+        }
+
+        function startStopwatch() {
+            if (!isRunning) {
+                startTime = Date.now();
+                timer = setInterval(updateDisplay, 10);
+                isRunning = true;
+            }
+        }
+
+        function stopStopwatch() {
+            if (isRunning) {
+                elapsedTime += Date.now() - startTime;
+                clearInterval(timer);
+                isRunning = false;
+            }
+        }
+
+        function resetStopwatch() {
+            clearInterval(timer);
+            isRunning = false;
+            elapsedTime = 0;
+            document.getElementById("display").textContent = "00:00:00";
+        }
+    </script>
+
+</body>
+</html>
+
